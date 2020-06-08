@@ -1,13 +1,8 @@
 //========================================
 //  firestoreからのデータを表示
 //  setupGuidesメソッドはindex.jsにあり
-//
+//  -> ログインしている場合のみ、データを取得して表示。ログインしていなければ見せないように
 //========================================
-db.collection('guides')
-	.get()
-	.then((snapshot) => {
-		setupGuides(snapshot.docs);
-	});
 
 //========================================
 //  listen for auth status changes
@@ -17,9 +12,17 @@ db.collection('guides')
 //========================================
 auth.onAuthStateChanged((user) => {
 	if (user) {
-		console.log('user logged in: ', user);
+		// console.log('user logged in: ', user);
+		// firestoreからのデータを表示
+		db.collection('guides')
+			.get()
+			.then((snapshot) => {
+				setupGuides(snapshot.docs);
+			});
 	} else {
-		console.log('user logged out');
+		// console.log('user logged out');
+		// ログインしていなければ何も表示しないように
+		setupGuides([]);
 	}
 });
 
