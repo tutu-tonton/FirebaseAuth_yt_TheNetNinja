@@ -1,4 +1,18 @@
 //========================================
+//  listen for auth status changes
+//  onAuthStateChanged(): authの状態を変更するようなイベント
+//  ログイン状態なら user が返ってくる
+//  ログアウト状態なら null が返ってくる
+//========================================
+auth.onAuthStateChanged((user) => {
+	if (user) {
+		console.log('user logged in: ', user);
+	} else {
+		console.log('user logged out');
+	}
+});
+
+//========================================
 //  signup with email&pass
 //
 //
@@ -35,9 +49,11 @@ signupForm.addEventListener('submit', (e) => {
 const logout = document.querySelector('#logout');
 logout.addEventListener('click', (e) => {
 	e.preventDefault();
-	auth.signOut().then(() => {
-		console.log('user signed out');
-	});
+	auth.signOut();
+	// ちゃんとサインアウトできてるか確認用
+	// auth.signOut().then(() => {
+	// 	console.log('user signed out');
+	// });
 });
 
 //========================================
@@ -55,7 +71,7 @@ loginForm.addEventListener('submit', (e) => {
 	const password = loginForm['login-password'].value;
 
 	auth.signInWithEmailAndPassword(email, password).then((cred) => {
-		console.log(cred.user);
+		// console.log(cred.user);
 		// close the login modal and reset the form
 		const modal = document.querySelector('#modal-login');
 		M.Modal.getInstance(modal).close();
