@@ -1,4 +1,15 @@
 //========================================
+//  firestoreからのデータを表示
+//  setupGuidesメソッドはindex.jsにあり
+//
+//========================================
+db.collection('guides')
+	.get()
+	.then((snapshot) => {
+		setupGuides(snapshot.docs);
+	});
+
+//========================================
 //  listen for auth status changes
 //  onAuthStateChanged(): authの状態を変更するようなイベント
 //  ログイン状態なら user が返ってくる
