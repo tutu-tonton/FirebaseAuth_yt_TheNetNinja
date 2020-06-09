@@ -2,7 +2,7 @@
 //  firestoreからのデータを表示
 //  setupGuidesメソッドはindex.jsにあり
 //  -> ログインしている場合のみ、データを取得して表示。ログインしていなければ見せないように
-//  14行目に組み込む
+//  onAuthStateChangedメソッドに組みこみ
 //========================================
 
 //========================================
@@ -95,4 +95,32 @@ loginForm.addEventListener('submit', (e) => {
 		M.Modal.getInstance(modal).close();
 		loginForm.reset();
 	});
+});
+
+//========================================
+//  create new guide
+//  注意点！
+//  ガイドの作成はログインしていないとできない。
+//  ただし検証のElements欄には現れていて、display:noneを無効にすれば画面上に現れる
+//  そこからログインしてなくてもガイドが作成できてしまう
+//  -> firestore側でのセキュリティが大事!
+//========================================
+const createForm = document.querySelector('#create-form');
+createForm.addEventListener('submit', (e) => {
+	e.preventDefault();
+
+	db.collection('guides')
+		.add({
+			title: createForm['title'].value,
+			content: createForm['content'].value,
+		})
+		.then(() => {
+			// close the modal and reset form
+			const modal = document.querySelector('#modal-create');
+			M.Modal.getInstance(modal).close();
+			createForm.reset();
+		})
+		.catch((err) => {
+			console.log(err.message);
+		});
 });
