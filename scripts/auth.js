@@ -40,6 +40,22 @@ auth.onAuthStateChanged((user) => {
 });
 
 //========================================
+// add admin cloud function
+//
+//
+//
+//========================================
+const adminForm = document.querySelector('.admin-actions');
+adminForm.addEventListener('submit', (e) => {
+	e.preventDefault();
+	const adminEmail = document.querySelector('#admin-email').value;
+	const addAdminRole = functions.httpsCallable('addAdminRole');
+	addAdminRole({ email: adminEmail }).then((result) => {
+		console.log(result);
+	});
+});
+
+//========================================
 //  signup with email&pass
 //  ユーザー作成後に補足情報をfirestoreの方に保存する
 //  auth: cred.user.uid を利用して
