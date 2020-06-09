@@ -17,7 +17,14 @@
 //========================================
 auth.onAuthStateChanged((user) => {
 	if (user) {
-		console.log('user logged in: ', user);
+		// console.log('user logged in: ', user);
+		// ログインユーザーがadminかどうか確認
+		user.getIdTokenResult().then((idTokenResult) => {
+			// console.log(idTokenResult.claims.admin);  // adminならtrueが返ってくる
+			user.admin = idTokenResult.claims.admin; // adminならtrue, 違うならfalse入る
+			setupUI(user);
+		});
+
 		// firestoreからのデータを表示
 		db.collection('guides')
 			// .get().then()
@@ -25,7 +32,6 @@ auth.onAuthStateChanged((user) => {
 			.onSnapshot(
 				(snapshot) => {
 					setupGuides(snapshot.docs);
-					setupUI(user);
 				},
 				(err) => {
 					console.log(err.message);
@@ -75,7 +81,7 @@ signupForm.addEventListener('submit', (e) => {
 			// signupに成功するとtokenが返ってくる.
 			// console.log(cred);
 			// tokenの中のuserに入力したemail等が入っている
-			console.log(cred.user);
+			// console.log(cred.user);
 			// authからfirestoreへ
 			// authのトークンに作成ユーザーのuniqueIDが入っている
 			// そのIDをfirestore側でのドキュメントIDにして新規ドキュメント作成
@@ -89,6 +95,10 @@ signupForm.addEventListener('submit', (e) => {
 			M.Modal.getInstance(modal).close();
 			// 入力後に入力欄リセットする
 			signupForm.reset();
+			signupForm.querySelector('.error').innerHTML = '';
+		})
+		.catch((err) => {
+			signupForm.querySelector('.error').innerHTML = err.message;
 		});
 });
 
@@ -121,13 +131,18 @@ loginForm.addEventListener('submit', (e) => {
 	const email = loginForm['login-email'].value;
 	const password = loginForm['login-password'].value;
 
-	auth.signInWithEmailAndPassword(email, password).then((cred) => {
-		// console.log(cred.user);
-		// close the login modal and reset the form
-		const modal = document.querySelector('#modal-login');
-		M.Modal.getInstance(modal).close();
-		loginForm.reset();
-	});
+	auth.signInWithEmailAndPassword(email, password)
+		.then((cred) => {
+			// console.log(cred.user);
+			// close the login modal and reset the form
+			const modal = document.querySelector('#modal-login');
+			M.Modal.getInstance(modal).close();
+			loginForm.reset();
+			loginForm.querySelector('.error').innerHTML = '';
+		})
+		.catch((err) => {
+			loginForm.querySelector('.error').innerHTML = err.message;
+		});
 });
 
 //========================================

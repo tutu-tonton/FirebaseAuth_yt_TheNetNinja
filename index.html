@@ -19,7 +19,6 @@
 				<!-- ログインしてるしてないで表示するもの変える
         ページリフレッシュした直後は、一瞬全てが表示されてしまう。
         デフォルトでdisplay:noneに設定しておく -->
-
 				<ul id="nav-mobile" class="right hide-on-med-and-down">
 					<li class="logged-in" style="display: none;">
 						<a href="#" class="grey-text modal-trigger" data-target="modal-account">Account</a>
@@ -27,7 +26,7 @@
 					<li class="logged-in" style="display: none;">
 						<a href="#" class="grey-text" id="logout">Logout</a>
 					</li>
-					<li class="logged-in" style="display: none;">
+					<li class="admin" style="display: none;">
 						<a href="#" class="grey-text modal-trigger" data-target="modal-create">Create Guide</a>
 					</li>
 					<li class="logged-out" style="display: none;">
@@ -41,7 +40,7 @@
 		</nav>
 
 		<!-- ADMIN ACTIONS -->
-		<form class="center-align admin-actions" style="margin: 40px auto; max-width: 300px;">
+		<form class="center-align admin-actions admin" style="margin: 40px auto; max-width: 300px; display: none;">
 			<input type="email" placeholder="User email" id="admin-email" required />
 			<button class="btn-small yellow darken-2 z-depth-0">Make admin</button>
 		</form>
@@ -65,6 +64,7 @@
 						<label for="signup-bio">One Line Bio</label>
 					</div>
 					<button class="btn yellow darken-2 z-depth-0">Sign up</button>
+					<p class="error pink-text center-align"></p>
 				</form>
 			</div>
 		</div>
@@ -84,6 +84,7 @@
 						<label for="login-password">Your password</label>
 					</div>
 					<button class="btn yellow darken-2 z-depth-0">Login</button>
+					<p class="error pink-text center-align"></p>
 				</form>
 			</div>
 		</div>

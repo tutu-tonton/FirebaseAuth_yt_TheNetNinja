@@ -3,14 +3,20 @@ const guideList = document.querySelector('.guides');
 const loggedOutLinks = document.querySelectorAll('.logged-out');
 const loggedInLinks = document.querySelectorAll('.logged-in');
 const accountDetails = document.querySelector('.account-details');
+const adminItems = document.querySelectorAll('.admin');
 
 //========================================
 //  setup UI
 //  メニューバー：ログインしている時・してない時で表示変える
 //  アカウント情報： ユーザー作成時に一言bioがfirestore内に作成されてる。それを表示
+//  adminならadmin用表示が出るように
 //========================================
 const setupUI = (user) => {
 	if (user) {
+		// adminなら...
+		if (user.admin) {
+			adminItems.forEach((item) => (item.style.display = 'block'));
+		}
 		// account info
 		// firestoreのユーザー情報を取りに行き、そのドキュメント情報を出力する
 		db.collection('users')
@@ -20,6 +26,7 @@ const setupUI = (user) => {
 				const html = `
         <div>Logged in as ${user.email}</div>
         <div>${doc.data().bio}</div>
+        <div class="pink-text">${user.admin ? 'Admin' : ''}</div>
       `;
 				accountDetails.innerHTML = html;
 			});
@@ -27,6 +34,7 @@ const setupUI = (user) => {
 		loggedInLinks.forEach((item) => (item.style.display = 'block'));
 		loggedOutLinks.forEach((item) => (item.style.display = 'none'));
 	} else {
+		adminItems.forEach((item) => (item.style.display = 'none'));
 		// hide account info
 		accountDetails.innerHTML = '';
 		// toggle UI elements
