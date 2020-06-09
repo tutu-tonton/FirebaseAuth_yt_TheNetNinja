@@ -2,6 +2,7 @@
 //  firestoreからのデータを表示
 //  setupGuidesメソッドはindex.jsにあり
 //  -> ログインしている場合のみ、データを取得して表示。ログインしていなければ見せないように
+//  14行目に組み込む
 //========================================
 
 //========================================
@@ -9,20 +10,23 @@
 //  onAuthStateChanged(): authの状態を変更するようなイベント
 //  ログイン状態なら user が返ってくる
 //  ログアウト状態なら null が返ってくる
+//  ログイン状態ならガイドアイテム表示、ナビメニューをログイン仕様に
 //========================================
 auth.onAuthStateChanged((user) => {
 	if (user) {
-		// console.log('user logged in: ', user);
+		console.log('user logged in: ', user);
 		// firestoreからのデータを表示
 		db.collection('guides')
 			.get()
 			.then((snapshot) => {
 				setupGuides(snapshot.docs);
+				setupUI(user);
 			});
 	} else {
-		// console.log('user logged out');
+		console.log('user logged out');
 		// ログインしていなければ何も表示しないように
 		setupGuides([]);
+		setupUI();
 	}
 });
 

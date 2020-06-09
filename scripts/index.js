@@ -1,9 +1,28 @@
 // DOM elements
 const guideList = document.querySelector('.guides');
+const loggedOutLinks = document.querySelectorAll('.logged-out');
+const loggedInLinks = document.querySelectorAll('.logged-in');
+
+//========================================
+//  setup UI
+//  メニューバー：ログインしている時・してない時で表示変える
+//
+//========================================
+const setupUI = (user) => {
+	if (user) {
+		// toggle UI elements
+		loggedInLinks.forEach((item) => (item.style.display = 'block'));
+		loggedOutLinks.forEach((item) => (item.style.display = 'none'));
+	} else {
+		// toggle UI elements
+		loggedInLinks.forEach((item) => (item.style.display = 'none'));
+		loggedOutLinks.forEach((item) => (item.style.display = 'block'));
+	}
+};
 
 //========================================
 //  setup guides
-//
+//  ログインしているときはそのデータでdom作る
 //
 //========================================
 // data = snapshot.docs
