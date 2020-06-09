@@ -11,14 +11,17 @@
 //  ログイン状態なら user が返ってくる
 //  ログアウト状態なら null が返ってくる
 //  ログイン状態ならガイドアイテム表示、ナビメニューをログイン仕様に
+//  onSnapshot(): スナップショットが変更されるようなイベント
+//  常時listenするようになるので、データ追加しようとすると即時反映されるようになる
 //========================================
 auth.onAuthStateChanged((user) => {
 	if (user) {
 		console.log('user logged in: ', user);
 		// firestoreからのデータを表示
 		db.collection('guides')
-			.get()
-			.then((snapshot) => {
+			// .get().then()
+			// realtime listenerにする
+			.onSnapshot((snapshot) => {
 				setupGuides(snapshot.docs);
 				setupUI(user);
 			});
