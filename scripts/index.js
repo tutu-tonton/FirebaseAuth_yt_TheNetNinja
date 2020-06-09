@@ -7,15 +7,22 @@ const accountDetails = document.querySelector('.account-details');
 //========================================
 //  setup UI
 //  メニューバー：ログインしている時・してない時で表示変える
-//
+//  アカウント情報： ユーザー作成時に一言bioがfirestore内に作成されてる。それを表示
 //========================================
 const setupUI = (user) => {
 	if (user) {
 		// account info
-		const html = `
-      <div>Logged in as ${user.email}</div>
-    `;
-		accountDetails.innerHTML = html;
+		// firestoreのユーザー情報を取りに行き、そのドキュメント情報を出力する
+		db.collection('users')
+			.doc(user.uid)
+			.get()
+			.then((doc) => {
+				const html = `
+        <div>Logged in as ${user.email}</div>
+        <div>${doc.data().bio}</div>
+      `;
+				accountDetails.innerHTML = html;
+			});
 		// toggle UI elements
 		loggedInLinks.forEach((item) => (item.style.display = 'block'));
 		loggedOutLinks.forEach((item) => (item.style.display = 'none'));
