@@ -8,7 +8,8 @@
 //========================================
 //  listen for auth status changes
 //  onAuthStateChanged(): authの状態を変更するようなイベント
-//  ログイン状態なら user が返ってくる
+//  ログイン状態なら userオブジェクト が返ってくる
+//  user.displayName, user.email
 //  ログアウト状態なら null が返ってくる
 //  ログイン状態ならガイドアイテム表示、ナビメニューをログイン仕様に
 //  onSnapshot(): スナップショットが変更されるようなイベント
@@ -24,6 +25,9 @@ auth.onAuthStateChanged((user) => {
 			.onSnapshot((snapshot) => {
 				setupGuides(snapshot.docs);
 				setupUI(user);
+			})
+			.catch((err) => {
+				console.log(err.message);
 			});
 	} else {
 		console.log('user logged out');
